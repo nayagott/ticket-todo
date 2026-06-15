@@ -10,6 +10,12 @@
 !.yarn/releases
 !.yarn/versions
 
+# Environment
+.env
+.env.local
+.env.*.local
+.mcp.json
+
 # testing
 /coverage
 
