@@ -17,7 +17,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## 1. 설계 문서 목록
 
-아래 7개 문서가 이 프로젝트의 단일 진실 공급원(Single Source of Truth)이다.
+아래 8개 문서가 이 프로젝트의 단일 진실 공급원(Single Source of Truth)이다.
 코드 작성 전 반드시 해당 문서를 확인하고, 문서와 충돌하는 구현은 금지한다.
 
 | 경로                      | 용도                                                   | Claude Code 수정 권한       |
@@ -28,6 +28,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 | `docs/DATA_MODEL.md`      | DB 스키마 SSOT — 컬럼 타입·인덱스·DTO·시드 데이터      | **사용자 지시 시에만 수정** |
 | `docs/API_SPEC.md`        | 엔드포인트 상세 명세 (요청·응답·에러·order 규칙)       | **사용자 지시 시에만 수정** |
 | `docs/COMPONENT_SPEC.md`  | 컴포넌트 책임·Props·State·이벤트·접근성 명세           | **사용자 지시 시에만 수정** |
+| `docs/TEST_SPEC.md`       | TDD 테스트케이스 명세 및 FR/NFR 추적 매트릭스          | **사용자 지시 시에만 수정** |
 | `docs/tika-wireframe.png` | UI 레이아웃 스케치 (PRD 레이아웃 설계 근거)            | **수정 불가** (이미지)      |
 
 > 설계 문서는 구현 과정에서 스펙 변경, 불일치 수정, 기능 추가 등으로 개정될 수 있다.
@@ -144,6 +145,7 @@ tickettodo/
 │   ├── DATA_MODEL.md
 │   ├── API_SPEC.md
 │   ├── COMPONENT_SPEC.md
+│   ├── TEST_SPEC.md
 │   └── tika-wireframe.png
 ├── drizzle/
 │   └── migrations/
@@ -265,6 +267,7 @@ npm run format
 
 | 버전 | 날짜       | 변경 내용                                                        |
 | ---- | ---------- | ---------------------------------------------------------------- |
+| v1.3 | 2026-06-15 | §1 문서 목록에 TEST_SPEC.md 추가 (8개 문서) |
 | v1.2 | 2026-06-15 | §1 문서 목록에 COMPONENT_SPEC.md 추가 (7개 문서) |
 | v1.1 | 2026-06-15 | §1 문서 목록에 DATA_MODEL.md·API_SPEC.md 추가, tika-wireframe.png 경로 수정, DATA_MODEL.md 스키마 SSOT 우선순위 명시, §2-2 wireframe 경로 수정, §2-3 API_SPEC.md 1차 참조 추가 |
 | v1.0 | 2026-06-11 | 최초 작성. REQUIREMENTS.md v1.0 + PRD.md v1.0 + TRD.md v1.0 기반 |
