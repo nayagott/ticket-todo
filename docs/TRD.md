@@ -1,8 +1,8 @@
 # TRD.md — TicketTodo
 
 > 작성일: 2026-06-11
-> 버전: v1.0
-> 기반 문서: PRD.md v1.0, REQUIREMENTS.md v1.0
+> 버전: v1.2
+> 기반 문서: PRD.md v1.0, REQUIREMENTS.md v1.1
 > 상태: 초안
 
 ---

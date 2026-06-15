@@ -1,7 +1,7 @@
 # TEST_SPEC.md — TicketTodo
 
 > 작성일: 2026-06-15
-> 버전: v1.0
+> 버전: v1.1
 > 기반 문서: REQUIREMENTS.md v1.1 · PRD.md v1.0 · TRD.md v1.2 · DATA_MODEL.md v1.0 · API_SPEC.md v1.1 · COMPONENT_SPEC.md v1.0
 
 ---
@@ -346,6 +346,7 @@ src/
 | TC-HOOK-010 | onDragEnd — 칼럼 간 이동 시 moveTicket 호출 | ✅ Happy | `moveTicket` mock | `DragEndEvent`: active.id=티켓id, over.id="TODO" | `moveTicket(id, "TODO", 계산된order)` 1회 호출 | FR-009 |
 | TC-HOOK-011 | onDragEnd — 칼럼 내 order 중간값 계산 | 🔲 Edge | 칼럼 내 prevOrder=1000, nextOrder=3000 | `DragEndEvent`: 동일 칼럼 내 이동 | `moveTicket` 호출 인자의 order === 2000 | NFR-015 |
 | TC-HOOK-012 | onDragEnd — over=null(드롭 취소) 시 미호출 | 🔲 Edge | — | `DragEndEvent`: over=null | `moveTicket` 미호출 | FR-009 |
+| TC-HOOK-013 | onDragEnd — diff ≤ 1 시 전체 재정규화 호출 | 🔲 Edge | 동일 칼럼 내 prevOrder=1000, nextOrder=1001 | `DragEndEvent`: 동일 칼럼 내 이동 | `moveTicket` 미호출, 재정규화 함수 1회 호출 | NFR-015 |
 
 ---
 
@@ -494,7 +495,7 @@ src/
 | NFR-012 | 색상 대비 WCAG AA 4.5:1 | TC-COMP-023, TC-COMP-024 (클래스 확인) | ⚠️ 자동: 클래스 존재 확인 / 수동: 실제 대비 측정 |
 | NFR-013 | 낙관적 업데이트·롤백 | TC-HOOK-005, TC-HOOK-007, TC-INT-005 | ✅ |
 | NFR-014 | 서버 응답값으로 재동기화 | TC-HOOK-006 | ✅ |
-| NFR-015 | order 중간값·재정규화 | TC-HOOK-011, TC-INT-009 | ✅ |
+| NFR-015 | order 중간값·재정규화 | TC-HOOK-011, TC-HOOK-013, TC-INT-009 | ✅ |
 | NFR-016 | 입력값 이중 검증 (UI + API) | TC-API-006~011, TC-COMP-038~040, TC-INT-002 | ✅ |
 | NFR-017 | 삭제 확인 다이얼로그 필수 | TC-COMP-048~050, TC-COMP-052~056, TC-INT-018~019 | ✅ |
 | NFR-018 | Chrome/Safari/Firefox/Edge 호환 | — | ⚠️ 수동 / 각 브라우저 실행 확인 |
@@ -525,4 +526,5 @@ src/
 
 | 버전 | 날짜 | 변경 내용 |
 |------|------|-----------|
+| v1.1 | 2026-06-15 | §3-13 TC-HOOK-013 추가 (NFR-015 diff ≤ 1 재정규화 케이스). 총 133개 |
 | v1.0 | 2026-06-15 | 최초 작성. TC-API 29개·TC-COMP 56개·TC-HOOK 12개·TC-UTIL 15개·TC-INT 20개, 총 132개 테스트케이스. FR 전항목 ✅, NFR 14개 ✅ / 11개 ⚠️ |

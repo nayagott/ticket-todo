@@ -62,7 +62,13 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - 요청/응답 타입은 `src/shared/schemas/ticketSchema.ts`의 Zod 스키마를 따른다
 - 에러 응답 형식은 TRD §6 공통 에러 응답 형식을 따른다
 
-### 2-4. 충돌 발생 시 — 작업 중단 필수
+### 2-4. 테스트 구현 시
+
+- 테스트 대상 기능의 **TC 번호를 먼저 확인**한다 (`docs/TEST_SPEC.md`)
+- API·컴포넌트·훅·유틸 각 레이어 도구는 TEST_SPEC.md §1-1을 따른다 (Jest + RTL + MSW + next-test-api-route-handler)
+- 새 TC 추가 시 TEST_SPEC.md §5 추적 매트릭스(FR·NFR 연관)를 함께 갱신한다
+
+### 2-5. 충돌 발생 시 — 작업 중단 필수
 
 구현 중 아래 상황이 발생하면 **즉시 작업을 중단**하고 사용자에게 보고한다:
 
@@ -267,6 +273,7 @@ npm run format
 
 | 버전 | 날짜       | 변경 내용                                                        |
 | ---- | ---------- | ---------------------------------------------------------------- |
+| v1.4 | 2026-06-15 | §2-4 "테스트 구현 시" 참조 규칙 추가, 기존 §2-4 → §2-5 재번호 |
 | v1.3 | 2026-06-15 | §1 문서 목록에 TEST_SPEC.md 추가 (8개 문서) |
 | v1.2 | 2026-06-15 | §1 문서 목록에 COMPONENT_SPEC.md 추가 (7개 문서) |
 | v1.1 | 2026-06-15 | §1 문서 목록에 DATA_MODEL.md·API_SPEC.md 추가, tika-wireframe.png 경로 수정, DATA_MODEL.md 스키마 SSOT 우선순위 명시, §2-2 wireframe 경로 수정, §2-3 API_SPEC.md 1차 참조 추가 |

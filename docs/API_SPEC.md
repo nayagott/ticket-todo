@@ -1,8 +1,8 @@
 # API_SPEC.md — TicketTodo
 
 > 작성일: 2026-06-15
-> 버전: v1.0
-> 기반 문서: REQUIREMENTS.md v1.0 · PRD.md v1.0 · TRD.md v1.1 · DATA_MODEL.md v1.0
+> 버전: v1.1
+> 기반 문서: REQUIREMENTS.md v1.1 · PRD.md v1.0 · TRD.md v1.2 · DATA_MODEL.md v1.0
 > 스키마 SSOT: DATA_MODEL.md (TRD §3-1·§3-2 코드 예시보다 우선)
 
 ---

@@ -1,7 +1,7 @@
 # REQUIREMENTS.md — TicketTodo MVP
 
 > 최종 확정일: 2026-06-11
-> 버전: v1.0
+> 버전: v1.1
 > 작성 기준: FR 18개 + NFR 25개
 
 ---
