@@ -32,8 +32,8 @@
 | priority    | enum (Low \| Medium \| High)                  | —    | 우선순위                      |
 | status      | enum (Backlog \| TODO \| In Progress \| Done) | ✅    | 현재 칼럼 위치                |
 | order       | integer                                       | ✅    | 칼럼 내 순서 (1000 단위 간격) |
-| startedAt   | date                                          | —    | 시작예정일                    |
-| dueDate     | date                                          | —    | 종료예정일                    |
+| startedAt   | timestamp                                     | —    | 시작예정일                    |
+| dueDate     | timestamp                                     | —    | 종료예정일                    |
 | createdAt   | timestamp                                     | ✅    | 생성 시각 (자동)              |
 | updatedAt   | timestamp                                     | ✅    | 수정 시각 (자동)              |
 
@@ -183,4 +183,5 @@
 
 | 버전 | 날짜       | 변경 내용                          |
 | ---- | ---------- | ---------------------------------- |
+| v1.1 | 2026-06-15 | §2 startedAt·dueDate 타입 date → timestamp (DATA_MODEL.md v1.0 결정 반영) |
 | v1.0 | 2026-06-11 | 최초 작성. FR 18개 + NFR 25개 확정 |

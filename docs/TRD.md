@@ -147,25 +147,24 @@ tickettodo/
 
 ```typescript
 // src/server/db/schema.ts
-import { pgTable, serial, varchar, text, timestamp, integer } from 'drizzle-orm/pg-core';
+// 인덱스 포함 전체 스키마 정의는 docs/DATA_MODEL.md §3 참조 (SSOT)
+import { pgTable, varchar, text, integer, uuid, timestamp } from 'drizzle-orm/pg-core';
 
 export const tickets = pgTable('tickets', {
-  id:          serial('id').primaryKey(),
+  id:          uuid('id').defaultRandom().primaryKey(),
   title:       varchar('title', { length: 255 }).notNull(),
   description: text('description'),
-  status:      varchar('status', { length: 20 }).notNull().default('Backlog'),
-  // 'Backlog' | 'TODO' | 'In Progress' | 'Done'
+  status:      varchar('status',   { length: 20 }).notNull().default('Backlog'),
   priority:    varchar('priority', { length: 10 }),
-  // 'Low' | 'Medium' | 'High' | null
-  order:       integer('order').notNull().default(0),
+  order:       integer('order').notNull(),
   startedAt:   timestamp('started_at'),
   dueDate:     timestamp('due_date'),
   createdAt:   timestamp('created_at').notNull().defaultNow(),
-  updatedAt:   timestamp('updated_at').notNull().defaultNow(),
+  updatedAt:   timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date()),
 });
 
-export type Ticket     = typeof tickets.$inferSelect;
-export type NewTicket  = typeof tickets.$inferInsert;
+export type Ticket    = typeof tickets.$inferSelect;
+export type NewTicket = typeof tickets.$inferInsert;
 ```
 
 ### 3-2. 공유 타입 및 Zod 스키마
@@ -343,7 +342,7 @@ export async function POST(req: NextRequest) {
 export const DUE_WARNING_DAYS = 3; // D-3 임박 기준
 
 // 사용 예시 (컴포넌트 내)
-export function getDeadlineStyle(dueDate: Date | null, status: string) {
+export function getDeadlineStyle(dueDate: string | null, status: string): string {
   if (!dueDate || status === 'Done') return 'border-gray-200';
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -488,4 +487,6 @@ graph LR
 
 | 버전 | 날짜       | 변경 내용                   |
 | ---- | ---------- | --------------------------- |
+| v1.2 | 2026-06-15 | 스키마 정합성 수정 — status/priority(pgEnum→varchar), startedAt/dueDate(date→timestamp), Zod startedAt/dueDate(z.string().date()→z.string().datetime()). DATA_MODEL.md v1.0 결정 반영 |
+| v1.1 | 2026-06-11 | 데이터 모델 정합성 수정 — id(serial→uuid), startedAt/dueDate(timestamp→date), priority/status(varchar→pgEnum), order(default(0)→제거), updatedAt($onUpdate 추가) |
 | v1.0 | 2026-06-11 | 최초 작성. PRD.md v1.0 기반 |

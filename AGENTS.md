@@ -17,21 +17,24 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## 1. 설계 문서 목록
 
-아래 4개 문서가 이 프로젝트의 단일 진실 공급원(Single Source of Truth)이다.
+아래 6개 문서가 이 프로젝트의 단일 진실 공급원(Single Source of Truth)이다.
 코드 작성 전 반드시 해당 문서를 확인하고, 문서와 충돌하는 구현은 금지한다.
 
-| 경로                   | 용도                                                   | Claude Code 수정 권한       |
-| ---------------------- | ------------------------------------------------------ | --------------------------- |
-| `docs/REQUIREMENTS.md` | FR 18개 + NFR 25개 전체 요구사항 원본                  | **사용자 지시 시에만 수정** |
-| `docs/PRD.md`          | 화면별 동작 정의, 사용자 시나리오, API 엔드포인트 요약 | **사용자 지시 시에만 수정** |
-| `docs/TRD.md`          | 디렉토리 구조, 계층 경계 규칙, 스키마, 코드 예시       | **사용자 지시 시에만 수정** |
-| `docs/wireframe.png`   | UI 레이아웃 스케치 (PRD 레이아웃 설계 근거)            | **수정 불가** (이미지)      |
+| 경로                      | 용도                                                   | Claude Code 수정 권한       |
+| ------------------------- | ------------------------------------------------------ | --------------------------- |
+| `docs/REQUIREMENTS.md`    | FR 18개 + NFR 25개 전체 요구사항 원본                  | **사용자 지시 시에만 수정** |
+| `docs/PRD.md`             | 화면별 동작 정의, 사용자 시나리오, API 엔드포인트 요약 | **사용자 지시 시에만 수정** |
+| `docs/TRD.md`             | 디렉토리 구조, 계층 경계 규칙, 코드 예시               | **사용자 지시 시에만 수정** |
+| `docs/DATA_MODEL.md`      | DB 스키마 SSOT — 컬럼 타입·인덱스·DTO·시드 데이터      | **사용자 지시 시에만 수정** |
+| `docs/API_SPEC.md`        | 엔드포인트 상세 명세 (요청·응답·에러·order 규칙)       | **사용자 지시 시에만 수정** |
+| `docs/tika-wireframe.png` | UI 레이아웃 스케치 (PRD 레이아웃 설계 근거)            | **수정 불가** (이미지)      |
 
 > 설계 문서는 구현 과정에서 스펙 변경, 불일치 수정, 기능 추가 등으로 개정될 수 있다.
 > Claude Code는 코드 작업 중 **임의로 수정하지 않는다.**
 > 수정이 필요하다고 판단되면 작업을 중단하고 사용자에게 변경 내용을 제안한 뒤 승인을 받아 반영한다.
 
-> **문서 우선순위**: REQUIREMENTS.md > PRD.md > TRD.md
+> **문서 우선순위**: REQUIREMENTS.md > PRD.md > TRD.md  
+> 단, **DB 스키마·컬럼 타입은 DATA_MODEL.md가 최우선(SSOT)**이며, 다른 문서의 타입 표기와 충돌하면 DATA_MODEL.md를 따른다.  
 > 문서 간 내용이 충돌하면 상위 문서를 우선하고, 즉시 사용자에게 보고한다.
 
 ---
@@ -46,14 +49,14 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ### 2-2. UI 컴포넌트 구현 시
 
-- **`docs/wireframe.png`를 반드시 참조**한다
+- **`docs/tika-wireframe.png`를 반드시 참조**한다
 - 레이아웃 구조는 PRD §4-1의 ASCII 다이어그램을 기준으로 한다
 - Backlog는 좌측 고정 패널, TODO/In Progress/Done은 메인 칸반 영역이다 (FR-006)
 - 티켓 카드 표시 요소는 PRD §4-6 표를 기준으로 구현한다 (FR-015)
 
 ### 2-3. API 구현 시
 
-- 엔드포인트 스펙은 PRD §6 및 TRD §6 표를 기준으로 한다
+- 엔드포인트 스펙은 **`docs/API_SPEC.md`를 1차 기준**으로, PRD §6 및 TRD §6을 보조 참조로 한다
 - 요청/응답 타입은 `src/shared/schemas/ticketSchema.ts`의 Zod 스키마를 따른다
 - 에러 응답 형식은 TRD §6 공통 에러 응답 형식을 따른다
 
@@ -137,7 +140,9 @@ tickettodo/
 │   ├── REQUIREMENTS.md
 │   ├── PRD.md
 │   ├── TRD.md
-│   └── wireframe.png
+│   ├── DATA_MODEL.md
+│   ├── API_SPEC.md
+│   └── tika-wireframe.png
 ├── drizzle/
 │   └── migrations/
 ├── drizzle.config.ts
@@ -258,6 +263,7 @@ npm run format
 
 | 버전 | 날짜       | 변경 내용                                                        |
 | ---- | ---------- | ---------------------------------------------------------------- |
+| v1.1 | 2026-06-15 | §1 문서 목록에 DATA_MODEL.md·API_SPEC.md 추가, tika-wireframe.png 경로 수정, DATA_MODEL.md 스키마 SSOT 우선순위 명시, §2-2 wireframe 경로 수정, §2-3 API_SPEC.md 1차 참조 추가 |
 | v1.0 | 2026-06-11 | 최초 작성. REQUIREMENTS.md v1.0 + PRD.md v1.0 + TRD.md v1.0 기반 |
 
 <!-- END:tickettodo-rules -->
