@@ -1,14 +1,17 @@
 import { eq, max } from 'drizzle-orm';
 import { db } from '@/server/db';
 import { tickets } from '@/server/db/schema';
+import type { ColumnStatus } from '@/shared/constants/status';
 import type { CreateTicketInput, UpdateTicketInput } from '@/shared/schemas/ticketSchema';
 import { toTicketDto, type TicketDto } from '@/shared/types/ticket';
+
+const DEFAULT_CREATE_STATUS: ColumnStatus = 'Backlog'; // FR-001: 신규 티켓은 항상 Backlog로 생성
 
 async function getNextBacklogOrder(): Promise<number> {
   const [{ maxOrder }] = await db
     .select({ maxOrder: max(tickets.order) })
     .from(tickets)
-    .where(eq(tickets.status, 'Backlog'));
+    .where(eq(tickets.status, DEFAULT_CREATE_STATUS));
 
   return maxOrder === null ? 1000 : maxOrder + 1000;
 }
@@ -22,7 +25,7 @@ export async function createTicket(input: CreateTicketInput): Promise<TicketDto>
       title: input.title,
       description: input.description,
       priority: input.priority,
-      status: 'Backlog',
+      status: DEFAULT_CREATE_STATUS,
       order,
       startedAt: input.startedAt ? new Date(input.startedAt) : undefined,
       dueDate: input.dueDate ? new Date(input.dueDate) : undefined,
