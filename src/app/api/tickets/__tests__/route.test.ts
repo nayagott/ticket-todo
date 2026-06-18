@@ -4,7 +4,7 @@
 import { testApiHandler } from 'next-test-api-route-handler'; // 반드시 첫 import
 
 import * as appHandler from '@/app/api/tickets/route';
-import { db, pool } from '@/server/db';
+import { db, client } from '@/server/db';
 import { tickets } from '@/server/db/schema';
 
 async function postTicket(body: unknown) {
@@ -30,7 +30,7 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
-  await pool.end();
+  await client.end();
 });
 
 describe('POST /api/tickets', () => {

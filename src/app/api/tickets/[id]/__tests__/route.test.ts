@@ -5,7 +5,7 @@ import { testApiHandler } from 'next-test-api-route-handler'; // 반드시 첫 i
 
 import { eq } from 'drizzle-orm';
 import * as appHandler from '@/app/api/tickets/[id]/route';
-import { db, pool } from '@/server/db';
+import { db, client } from '@/server/db';
 import { tickets } from '@/server/db/schema';
 
 async function insertTicket(overrides: Partial<typeof tickets.$inferInsert> = {}) {
@@ -70,7 +70,7 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
-  await pool.end();
+  await client.end();
 });
 
 describe('GET /api/tickets/:id', () => {
