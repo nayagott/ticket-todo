@@ -67,4 +67,36 @@ describe('useTickets', () => {
     expect(result.current.error).not.toBeNull();
     expect(result.current.tickets).toEqual([]);
   });
+
+  it('T011: createTicket → POST 호출 + tickets 상태에 추가', async () => {
+    const seed: TicketDto[] = [];
+    server.use(...ticketsHandlers(seed));
+
+    const { result } = renderHook(() => useTickets());
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+
+    await act(async () => {
+      await result.current.createTicket({ title: '새 티켓' });
+    });
+
+    expect(result.current.tickets).toHaveLength(1);
+    expect(result.current.tickets[0].title).toBe('새 티켓');
+    expect(result.current.tickets[0].status).toBe('Backlog');
+  });
+
+  it('T011: appendTicket → API 호출 없이 tickets 상태에 추가', async () => {
+    const seed = [makeTicket({ id: '1' })];
+    server.use(...ticketsHandlers(seed));
+
+    const { result } = renderHook(() => useTickets());
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+
+    const newTicket = makeTicket({ id: '99', title: '직접 추가' });
+    act(() => {
+      result.current.appendTicket(newTicket);
+    });
+
+    expect(result.current.tickets).toHaveLength(2);
+    expect(result.current.tickets[1].id).toBe('99');
+  });
 });

@@ -39,7 +39,7 @@ Conflict resolved: Principle III error format aligned with API_SPEC.md §3
 - 모든 함수 매개변수와 반환값에 명시적 타입을 선언한다.
 - `tsconfig.json`의 `strict` 플래그를 비활성화하는 PR은 병합할 수 없다.
 
-*Rationale*: 런타임 오류를 컴파일 타임에 차단하고, 코드베이스 전반의 타입 안전성을
+_Rationale_: 런타임 오류를 컴파일 타임에 차단하고, 코드베이스 전반의 타입 안전성을
 보장한다. strict 해제는 기술 부채를 즉시 증가시킨다.
 
 ### II. API Contract Compliance (NON-NEGOTIABLE)
@@ -52,7 +52,7 @@ Conflict resolved: Principle III error format aligned with API_SPEC.md §3
   문서를 먼저 개정하고 사용자 승인을 받는다.
 - 성공 응답과 에러 응답 모두 이 원칙의 적용을 받는다.
 
-*Rationale*: 클라이언트-서버 계약을 문서가 주도(spec-first)하도록 강제해 API 드리프트를
+_Rationale_: 클라이언트-서버 계약을 문서가 주도(spec-first)하도록 강제해 API 드리프트를
 방지한다.
 
 ### III. Error Response Shape
@@ -72,7 +72,7 @@ Conflict resolved: Principle III error format aligned with API_SPEC.md §3
 - HTTP 상태 코드: `400` 유효성 실패 / `404` 리소스 미존재 / `500` 서버 오류.
 - 500 에러는 반드시 `console.error`로 서버 측 로깅을 남긴다 (NFR-025).
 
-*Rationale*: 일관된 에러 형식은 클라이언트 오류 처리 코드를 단순하게 유지하고,
+_Rationale_: 일관된 에러 형식은 클라이언트 오류 처리 코드를 단순하게 유지하고,
 디버깅 비용을 낮춘다. `src/app/api/tickets/_lib/responses.ts`의 헬퍼 함수가 이
 계약을 구현한다.
 
@@ -86,7 +86,7 @@ Conflict resolved: Principle III error format aligned with API_SPEC.md §3
   동일 스키마를 참조한다.
 - Zod 검증을 통과하지 않은 데이터는 서비스 레이어로 전달되어서는 안 된다.
 
-*Rationale*: 클라이언트 우회 공격을 방어하고, 타입 추론과 런타임 검증을 단일 소스로
+_Rationale_: 클라이언트 우회 공격을 방어하고, 타입 추론과 런타임 검증을 단일 소스로
 통합해 중복 정의를 제거한다.
 
 ### V. Service Layer Separation (NON-NEGOTIABLE)
@@ -98,8 +98,54 @@ Conflict resolved: Principle III error format aligned with API_SPEC.md §3
 - `src/server/` 코드는 `src/client/`에서 import할 수 없다.
 - 서비스 함수는 `Request` / `Response` 등 HTTP 객체를 인자로 받지 않는다.
 
-*Rationale*: 계층 분리는 서비스 로직의 독립적 테스트를 가능하게 하고, DB 접근 코드가
+_Rationale_: 계층 분리는 서비스 로직의 독립적 테스트를 가능하게 하고, DB 접근 코드가
 클라이언트 번들에 포함되는 보안 위험을 제거한다.
+
+## 🚨 Guardrails (절대 준수 사항)
+
+AI 코딩 에이전트가 실수로 위험한 작업을 수행하지 않도록 명시적으로 금지하는 규칙들이다.
+**이 규칙들은 어떤 상황에서도 위반할 수 없다.**
+
+### 데이터베이스 금지 명령어
+
+- `DROP TABLE`, `DROP DATABASE` — 절대 금지
+- `TRUNCATE` — 절대 금지
+- `DELETE FROM` (WHERE 절 없이) — 절대 금지
+- `ALTER TABLE DROP COLUMN` — 사용자 명시적 허가 필요
+
+### 데이터베이스 안전 규칙
+
+- 삭제/리셋 작업 시 반드시 사용자 승인 요청
+- 삭제 전 백업 또는 복구 방법 안내
+- 테스트 데이터 존재 시 DB 리셋 대신 SQL로 해결
+- 운영 DB 자동 변경 절대 금지
+
+### Git 금지 명령어
+
+- `git push --force` — 절대 금지
+- `git reset --hard` — 절대 금지
+- `git clean -fd` — 사용자 확인 필요
+- `git branch -D` (main/master) — 절대 금지
+
+### 패키지 관리 금지 명령어
+
+- `npm audit fix --force` — 절대 금지
+- `rm -rf node_modules && npm install` — 사용자 확인 필요
+- 메이저 버전 자동 업그레이드 — 절대 금지
+
+### 파일 시스템 금지 명령어
+
+- `rm -rf /` 또는 루트 경로 삭제 — 절대 금지
+- 프로젝트 외부 파일 수정 — 절대 금지
+- `.env` 파일 삭제 — 사용자 확인 필요
+- `src/` 디렉토리 전체 삭제 — 절대 금지
+
+### 안전 작업 원칙
+
+- 파괴적 작업(삭제, 초기화) 전 반드시 사용자 확인
+- 복구 불가능한 작업은 백업 방법 먼저 안내
+- 자동화된 스크립트의 파괴적 명령 실행 금지
+- 의심스러운 작업은 실행 전 사용자에게 설명 및 확인
 
 ## Architecture Constraints
 
