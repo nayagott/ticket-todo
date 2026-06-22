@@ -25,4 +25,9 @@ export const ticketApi = {
     if (!res.ok) throw new Error('Failed to update ticket');
     return res.json();
   },
+
+  delete: async (id: string): Promise<void> => {
+    const res = await fetch(`/api/tickets/${id}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error('Failed to delete ticket');
+  },
 };

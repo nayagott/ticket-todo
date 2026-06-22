@@ -1,26 +1,84 @@
 @import "tailwindcss";
 
+/* ── Design Tokens ────────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Board chrome */
+  --color-board-bg:      #f1f2f4;
+  --color-column-bg:     #f1f2f4;
+  --color-card-bg:       #ffffff;
+  --color-header-bg:     #ffffff;
+
+  /* Brand / interactive */
+  --color-primary:       #0c66e4;
+  --color-primary-hover: #0055cc;
+
+  /* Text hierarchy */
+  --color-text-primary:   #172b4d;
+  --color-text-secondary: #44546f;
+  --color-text-subtle:    #626f86;
+
+  /* Borders */
+  --color-border:        #dcdfe4;
+  --color-border-hover:  #b6bec9;
+
+  /* Deadline border states (getDeadlineStyle) */
+  --color-deadline-ok:      #e2e8f0; /* border-gray-200  — FR-014 */
+  --color-deadline-soon:    #fb923c; /* border-orange-400 — FR-012 */
+  --color-deadline-overdue: #ef4444; /* border-red-500   — FR-013 */
+
+  /* Priority badge colours (WCAG AA ≥ 4.5:1 — NFR-012) */
+  --color-priority-low-bg:    #f1f5f9;
+  --color-priority-low-text:  #475569;
+  --color-priority-med-bg:    #dbeafe;
+  --color-priority-med-text:  #1d4ed8;
+  --color-priority-high-bg:   #fee2e2;
+  --color-priority-high-text: #b91c1c;
+
+  /* Layout constants */
+  --backlog-width:  280px;
+  --column-width:   272px;
+  --column-min-h:   120px;
+  --header-h:        56px;
+  --filterbar-h:     48px;
+  --card-radius:      8px;
+  --column-radius:   12px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* ── Global Base ──────────────────────────────────────────────────── */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-board-bg);
+  color: var(--color-text-primary);
+  font-family: ui-sans-serif, system-ui, Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Board Layout (COMPONENT_SPEC §4-1, NFR-005, NFR-006) ─────────── */
+/*
+  Flex row: Backlog (fixed) + kanban-area (flex-grow).
+  768px 미만: 전체 가로 스크롤로 4칼럼 모두 접근 가능.
+*/
+.board-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: calc(100vh - var(--header-h) - var(--filterbar-h));
+  padding: 12px 16px 24px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.kanban-area {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1 1 0%;
+  min-width: 0;
+}
+
+@media (max-width: 767px) {
+  .board-layout {
+    padding: 8px 8px 16px;
+  }
 }
