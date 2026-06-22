@@ -106,6 +106,27 @@ describe('Board DnD (FR-009)', () => {
   });
 });
 
+describe('Board DnD — aria-live 알림 (NFR-010)', () => {
+  it('TC-COMP-004: DnD 완료 → aria-live 영역에 이동 완료 메시지 포함', async () => {
+    const ticket = makeTicket({ id: 'ann-1', title: '알림 티켓', status: 'Backlog' });
+    server.use(...ticketsHandlers([ticket]));
+
+    const { container } = render(<Board />);
+    await waitFor(() => screen.getByText('알림 티켓'));
+    mockAllColumnRects();
+
+    const card = screen.getByText('알림 티켓').closest('[role="listitem"]') as HTMLElement;
+    const todoColumn = screen.getByRole('list', { name: 'TODO' });
+
+    dragAndDrop(card, { left: 10, top: 10, width: 80, height: 40 }, todoColumn, RECTS.TODO);
+
+    await waitFor(() => {
+      const liveRegion = container.querySelector('[aria-live="polite"]');
+      expect(liveRegion?.textContent).toContain('TODO');
+    });
+  });
+});
+
 describe('Board DnD — 칼럼 내 순서 변경 (FR-010)', () => {
   it('TC-INT-009: 같은 칼럼 내 카드 순서 변경 → order 변경 후 렌더 순서 반영', async () => {
     const ticketA = makeTicket({ id: '1', title: '카드A', status: 'TODO', order: 1000 });

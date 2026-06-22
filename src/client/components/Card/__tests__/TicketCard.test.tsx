@@ -3,6 +3,13 @@ import userEvent from '@testing-library/user-event';
 import { TicketCard } from '../TicketCard';
 import type { TicketDto } from '@/shared/types/ticket';
 
+function daysFromNow(n: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + n);
+  d.setHours(0, 0, 0, 0);
+  return d.toISOString();
+}
+
 const baseTicket: TicketDto = {
   id: 'tc-1',
   title: '테스트 티켓',
@@ -87,6 +94,24 @@ describe('TicketCard — deadline 테두리', () => {
     render(<TicketCard ticket={baseTicket} onClick={noop} />);
     expect(screen.getByRole('listitem')).toHaveClass('border-gray-200');
   });
+
+  it('TC-COMP-024: D-3 이내(+1일) → border-orange-400', () => {
+    const ticket: TicketDto = { ...baseTicket, status: 'TODO', dueDate: daysFromNow(1) };
+    render(<TicketCard ticket={ticket} onClick={noop} />);
+    expect(screen.getByRole('listitem')).toHaveClass('border-orange-400');
+  });
+
+  it('TC-COMP-025: D-3 당일(diffDays=3) → border-orange-400 (경계값)', () => {
+    const ticket: TicketDto = { ...baseTicket, status: 'TODO', dueDate: daysFromNow(3) };
+    render(<TicketCard ticket={ticket} onClick={noop} />);
+    expect(screen.getByRole('listitem')).toHaveClass('border-orange-400');
+  });
+
+  it('TC-COMP-026: D-4 → border-gray-200 (경계값)', () => {
+    const ticket: TicketDto = { ...baseTicket, status: 'TODO', dueDate: daysFromNow(4) };
+    render(<TicketCard ticket={ticket} onClick={noop} />);
+    expect(screen.getByRole('listitem')).toHaveClass('border-gray-200');
+  });
 });
 
 describe('TicketCard — 이벤트', () => {
@@ -102,5 +127,15 @@ describe('TicketCard — 이벤트', () => {
     render(<TicketCard ticket={baseTicket} onClick={noop} />);
     const card = screen.getByRole('listitem');
     expect(card).not.toHaveAttribute('tabindex', '-1');
+  });
+
+  it('TC-COMP-030: 키보드 Enter → onClick(ticket.id) 호출 (NFR-008, ♿ A11y)', async () => {
+    const onClick = jest.fn();
+    render(<TicketCard ticket={baseTicket} onClick={onClick} />);
+    const card = screen.getByRole('listitem');
+    card.focus();
+    await userEvent.keyboard('{Enter}');
+    expect(onClick).toHaveBeenCalledTimes(1);
+    expect(onClick).toHaveBeenCalledWith(baseTicket.id);
   });
 });

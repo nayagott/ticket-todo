@@ -12,14 +12,14 @@ import { useDnd } from '@/client/hooks/useDnd';
 import { useTickets } from '@/client/hooks/useTickets';
 import { groupByStatus } from '@/client/utils/groupByStatus';
 import { applyFilter, type FilterState } from '@/client/utils/filter';
-import type { TicketDto } from '@/shared/types/ticket';
+import type { ColumnStatus } from '@/shared/constants/status';
 
 const KANBAN_STATUSES = ['TODO', 'In Progress', 'Done'] as const;
 
 export function Board() {
-  const { tickets, appendTicket, moveTicket } = useTickets();
+  const { tickets, isLoading, error, createTicket, updateTicket, deleteTicket, moveTicket } = useTickets();
 
-  const [filter, setFilter]           = useState<FilterState>({ overdue: false, thisWeek: false });
+  const [filter, setFilter]                       = useState<FilterState>({ overdue: false, thisWeek: false });
   const [createModalOpen, setCreateModalOpen]     = useState(false);
   const [selectedTicketId, setSelectedTicketId]   = useState<string | null>(null);
   const [announcement, setAnnouncement]           = useState('');
@@ -36,32 +36,33 @@ export function Board() {
     setFilter(prev => ({ ...prev, [key]: !prev[key] }));
   }
 
-  function handleCreated(ticket: TicketDto) {
-    appendTicket(ticket);
-    setCreateModalOpen(false);
+  function renormalizeColumn(status: ColumnStatus) {
+    const columnTickets = tickets
+      .filter(t => t.status === status)
+      .sort((a, b) => a.order - b.order);
+
+    columnTickets.forEach((ticket, i) => {
+      const newOrder = (i + 1) * 1000;
+      if (ticket.order !== newOrder) {
+        void moveTicket(ticket.id, status, newOrder);
+      }
+    });
   }
 
-  function handleUpdated(ticket: TicketDto) {
-    // useTickets 상태는 Board를 통해 동기화 — appendTicket 미사용, 직접 반영 필요
-    // DetailModal의 onUpdated가 호출되면 selectedTicket도 최신값으로 갱신하기 위해
-    // tickets를 직접 업데이트하는 updateTicket 함수가 필요하지만
-    // MVP 범위에서는 다음 GET으로 재동기화하는 대신 낙관적으로 처리한다
-    void ticket; // 향후 useTickets.updateTicket 연결
-  }
-
-  function handleDeleted(id: string) {
-    setSelectedTicketId(null);
-    void id; // 향후 useTickets.deleteTicket 연결
-  }
-
-  const { sensors, onDragEnd } = useDnd(tickets, (id, status, order) =>
-    moveTicket(id, status, order).then(() => {
-      const t = tickets.find(tk => tk.id === id);
-      if (t) setAnnouncement(`"${t.title}"이(가) ${status}로 이동됐습니다.`);
-    }).catch(() => {
-      setAnnouncement('이동에 실패했습니다. 이전 상태로 복원됐습니다.');
-    }),
+  const { sensors, onDragEnd } = useDnd(
+    tickets,
+    (id, status, order) =>
+      moveTicket(id, status, order).then(() => {
+        const t = tickets.find(tk => tk.id === id);
+        if (t) setAnnouncement(`"${t.title}"이(가) ${status}로 이동됐습니다.`);
+      }).catch(() => {
+        setAnnouncement('이동에 실패했습니다. 이전 상태로 복원됐습니다.');
+      }),
+    renormalizeColumn,
   );
+
+  if (isLoading) return <div className="flex h-screen items-center justify-center text-sm text-gray-500">로딩 중...</div>;
+  if (error) return <div className="flex h-screen items-center justify-center text-sm text-red-600">오류: {error}</div>;
 
   return (
     <div className="flex h-screen flex-col bg-[var(--color-board-bg)]">
@@ -91,14 +92,14 @@ export function Board() {
       <CreateModal
         isOpen={createModalOpen}
         onClose={() => setCreateModalOpen(false)}
-        onCreated={handleCreated}
+        createTicket={createTicket}
       />
 
       <DetailModal
         ticket={selectedTicket}
         onClose={() => setSelectedTicketId(null)}
-        onUpdated={handleUpdated}
-        onDeleted={handleDeleted}
+        updateTicket={updateTicket}
+        deleteTicket={async (id) => { await deleteTicket(id); setSelectedTicketId(null); }}
       />
 
       {/* aria-live: DnD 결과 스크린리더 알림 (NFR-010) */}

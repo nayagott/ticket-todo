@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ticketApi } from '@/client/api/ticketApi';
 import { updateTicketSchema } from '@/shared/schemas/ticketSchema';
 import { COLUMN_STATUSES, PRIORITIES } from '@/shared/constants/status';
 import { ConfirmDialog } from './ConfirmDialog';
@@ -11,10 +10,10 @@ import type { UpdateTicketInput } from '@/shared/schemas/ticketSchema';
 type EditableField = keyof UpdateTicketInput;
 
 type DetailModalProps = {
-  ticket:    TicketDto | null; // null이면 비표시
-  onClose:   () => void;
-  onUpdated: (ticket: TicketDto) => void;
-  onDeleted: (id: string) => void;
+  ticket:       TicketDto | null;
+  onClose:      () => void;
+  updateTicket: (id: string, input: UpdateTicketInput) => Promise<TicketDto>;
+  deleteTicket: (id: string) => Promise<void>;
 };
 
 function formatDate(iso: string | null): string {
@@ -23,7 +22,7 @@ function formatDate(iso: string | null): string {
   return isNaN(d.getTime()) ? '—' : `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`;
 }
 
-export function DetailModal({ ticket, onClose, onUpdated, onDeleted }: DetailModalProps) {
+export function DetailModal({ ticket, onClose, updateTicket, deleteTicket }: DetailModalProps) {
   const [editField, setEditField] = useState<EditableField | null>(null);
   const [form, setForm]           = useState<UpdateTicketInput>({});
   const [confirmOpen, setConfirmOpen]   = useState(false);
@@ -77,8 +76,7 @@ export function DetailModal({ ticket, onClose, onUpdated, onDeleted }: DetailMod
     }
     setIsSubmitting(true);
     try {
-      const updated = await ticketApi.update(ticket!.id, { [field]: form[field] });
-      onUpdated(updated);
+      await updateTicket(ticket!.id, { [field]: form[field] });
       setError(null);
     } catch {
       setError('저장에 실패했습니다. 다시 시도해주세요.');
@@ -91,8 +89,8 @@ export function DetailModal({ ticket, onClose, onUpdated, onDeleted }: DetailMod
   async function handleDelete() {
     setIsSubmitting(true);
     try {
-      await ticketApi.delete(ticket!.id);
-      onDeleted(ticket!.id);
+      await deleteTicket(ticket!.id);
+      onClose();
     } catch {
       setError('삭제에 실패했습니다. 다시 시도해주세요.');
       setIsSubmitting(false);

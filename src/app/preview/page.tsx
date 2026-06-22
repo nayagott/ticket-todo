@@ -445,7 +445,12 @@ export default function PreviewPage() {
               <CreateModal
                 isOpen={createOpen}
                 onClose={() => setCreateOpen(false)}
-                onCreated={t => { alert(`생성됨: ${t.title}`); setCreateOpen(false); }}
+                createTicket={async (input) => {
+                  const ticket = { ...MOCK.plain, id: 'preview-new', title: input.title };
+                  alert(`생성됨: ${ticket.title}`);
+                  setCreateOpen(false);
+                  return ticket;
+                }}
               />
             </PreviewCard>
 
@@ -465,8 +470,16 @@ export default function PreviewPage() {
               <DetailModal
                 ticket={detailTicket}
                 onClose={() => setDetailTicket(null)}
-                onUpdated={t => { alert(`수정됨: ${t.title}`); setDetailTicket(t); }}
-                onDeleted={id => { alert(`삭제됨: ${id}`); setDetailTicket(null); }}
+                updateTicket={async (id, input) => {
+                  const updated = { ...detailTicket!, ...input };
+                  alert(`수정됨: ${updated.title}`);
+                  setDetailTicket(updated);
+                  return updated;
+                }}
+                deleteTicket={async (id) => {
+                  alert(`삭제됨: ${id}`);
+                  setDetailTicket(null);
+                }}
               />
             </PreviewCard>
 

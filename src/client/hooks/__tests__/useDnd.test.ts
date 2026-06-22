@@ -113,4 +113,21 @@ describe('useDnd', () => {
 
     expect(moveTicket).not.toHaveBeenCalled();
   });
+
+  it('TC-HOOK-013: 재정규화 필요 시(order 차이 ≤ 1) renormalize 콜백 호출', () => {
+    const moveTicket = jest.fn();
+    const renormalize = jest.fn();
+    // order가 1 차이 → calculateOrder returns { kind: 'renormalize' }
+    const tickets = [
+      makeTicket({ id: '1', status: 'TODO', order: 500 }),  // 드래그 대상
+      makeTicket({ id: '2', status: 'TODO', order: 1000 }), // over
+      makeTicket({ id: '3', status: 'TODO', order: 1001 }), // next (diff=1 → renormalize)
+    ];
+    const { result } = renderHook(() => useDnd(tickets, moveTicket, renormalize));
+
+    result.current.onDragEnd(dragEndEvent('1', '2'));
+
+    expect(moveTicket).not.toHaveBeenCalled();
+    expect(renormalize).toHaveBeenCalledWith('TODO');
+  });
 });

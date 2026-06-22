@@ -46,6 +46,25 @@ describe('applyFilter', () => {
     expect(result.map(t => t.id)).toEqual(['this']);
   });
 
+  it('TC-UTIL-008: overdue 활성 — Done 티켓은 초과여도 제외', () => {
+    const tickets = [
+      ticket({ id: 'over1', dueDate: d(-1), status: 'TODO' }),
+      ticket({ id: 'over2', dueDate: d(-2), status: 'In Progress' }),
+      ticket({ id: 'doneOver', dueDate: d(-1), status: 'Done' }),
+    ];
+    const result = applyFilter(tickets, { overdue: true, thisWeek: false });
+    const ids = result.map(t => t.id);
+    expect(ids).toContain('over1');
+    expect(ids).toContain('over2');
+    expect(ids).not.toContain('doneOver');
+  });
+
+  it('TC-UTIL-011: Done 티켓은 overdue 필터에서 제외 → 빈 배열 반환', () => {
+    const tickets = [ticket({ id: 'done', dueDate: d(-1), status: 'Done' })];
+    const result = applyFilter(tickets, { overdue: true, thisWeek: false });
+    expect(result).toHaveLength(0);
+  });
+
   it('둘 다 활성 → OR 조건 (하나라도 해당하면 포함)', () => {
     const tickets = [
       ticket({ id: 'over', dueDate: d(-1), status: 'TODO' }),

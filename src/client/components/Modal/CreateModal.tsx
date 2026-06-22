@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ticketApi } from '@/client/api/ticketApi';
 import { createTicketSchema } from '@/shared/schemas/ticketSchema';
 import type { CreateTicketInput } from '@/shared/schemas/ticketSchema';
 import type { TicketDto } from '@/shared/types/ticket';
@@ -9,7 +8,7 @@ import type { TicketDto } from '@/shared/types/ticket';
 type CreateModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onCreated: (ticket: TicketDto) => void;
+  createTicket: (input: CreateTicketInput) => Promise<TicketDto>;
 };
 
 type FormState = {
@@ -39,10 +38,11 @@ function buildInput(form: FormState): CreateTicketInput {
   return input;
 }
 
-export function CreateModal({ isOpen, onClose, onCreated }: CreateModalProps) {
+export function CreateModal({ isOpen, onClose, createTicket }: CreateModalProps) {
   const [form, setForm] = useState<FormState>(INITIAL_FORM);
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -76,11 +76,14 @@ export function CreateModal({ isOpen, onClose, onCreated }: CreateModalProps) {
       return;
     }
     setIsSubmitting(true);
+    setSubmitError(null);
     try {
-      const created = await ticketApi.create(parsed.data);
-      onCreated(created);
+      await createTicket(parsed.data);
       setForm(INITIAL_FORM);
       setErrors({});
+      onClose();
+    } catch {
+      setSubmitError('저장에 실패했습니다. 잠시 후 다시 시도해주세요.');
     } finally {
       setIsSubmitting(false);
     }
@@ -194,6 +197,12 @@ export function CreateModal({ isOpen, onClose, onCreated }: CreateModalProps) {
             </div>
           </div>
 
+          {submitError && (
+            <p role="alert" className="mb-4 rounded-md bg-red-50 px-3 py-2 text-xs text-red-600">
+              {submitError}
+            </p>
+          )}
+
           <div className="flex justify-end gap-2">
             <button
               type="button"
@@ -204,7 +213,7 @@ export function CreateModal({ isOpen, onClose, onCreated }: CreateModalProps) {
             </button>
             <button
               type="submit"
-              disabled={isSubmitting || form.title.trim() === ''}
+              disabled={isSubmitting || form.title.trim() === '' || form.title.trim().length > 255}
               className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700 disabled:opacity-50"
             >
               {isSubmitting ? '저장 중…' : '저장'}
