@@ -253,7 +253,7 @@ npm run format               # Prettier
 
 | 날짜 | 브랜치 | 요약 | 커밋 |
 |------|--------|------|------|
-| 2026-06-22 | main | /changelog Skill 커밋·푸시 — 수정 내역 리스트업 및 반영 확인 | `(pending)` |
+| 2026-06-22 | main | /changelog Skill 커밋·푸시 — 수정 내역 리스트업 및 반영 확인 | `55c117a` |
 | 2026-06-22 | main | /changelog Skill 생성 — CHANGELOG.md 상세 이력 + AGENTS.md 최근 변경사항 자동 갱신 | `4d53013` |
 | 2026-06-22 | main | /changelog Skill 구현 시스템 추가 (초기 테스트) | `4d53013` |
 
