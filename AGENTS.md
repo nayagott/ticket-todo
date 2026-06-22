@@ -244,3 +244,17 @@ npm run format               # Prettier
 3. **성능**: FCP ≤ 2초, API p95 ≤ 300ms
 
 <!-- END:tickettodo-rules -->
+
+---
+
+## 최근 변경사항
+
+> 자동 기록 — `/changelog` 명령어로 갱신됨. 최근 14일 이내 항목만 표시.
+
+| 날짜 | 브랜치 | 요약 | 커밋 |
+|------|--------|------|------|
+| 2026-06-22 | main | /changelog Skill 커밋·푸시 — 수정 내역 리스트업 및 반영 확인 | `(pending)` |
+| 2026-06-22 | main | /changelog Skill 생성 — CHANGELOG.md 상세 이력 + AGENTS.md 최근 변경사항 자동 갱신 | `4d53013` |
+| 2026-06-22 | main | /changelog Skill 구현 시스템 추가 (초기 테스트) | `4d53013` |
+
+*전체 이력은 [CHANGELOG.md](CHANGELOG.md) 참고.*

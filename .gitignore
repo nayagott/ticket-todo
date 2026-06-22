@@ -45,3 +45,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# claude code local settings (may contain secrets)
+.claude/settings.local.json
+
+# playwright mcp artifacts
+.playwright-mcp/
+
+# screenshots
+*.png
