@@ -1,4 +1,4 @@
-# TEST_SPEC.md — TicketTodo
+# TEST_CASES.md — TicketTodo
 
 > 작성일: 2026-06-15
 > 버전: v1.1

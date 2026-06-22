@@ -107,7 +107,7 @@ ticket-todo/
 | `docs/DATA_MODEL.md`      | DB 스키마 SSOT — 컬럼 타입·인덱스·DTO·시드 데이터 | **최우선 (DB 스키마)** | 사용자 지시 시에만 |
 | `docs/API_SPEC.md`        | 엔드포인트 상세 명세 (요청·응답·에러·order 규칙)  | 1차 참조 | 사용자 지시 시에만     |
 | `docs/COMPONENT_SPEC.md`  | 컴포넌트 책임·Props·State·이벤트·접근성 명세      | —        | 사용자 지시 시에만     |
-| `docs/TEST_SPEC.md`       | TC 명세 및 FR/NFR 추적 매트릭스                   | —        | 사용자 지시 시에만     |
+| `docs/TEST_CASES.md`      | TC 명세 및 FR/NFR 추적 매트릭스                   | —        | 사용자 지시 시에만     |
 | `docs/tika-wireframe.png` | UI 레이아웃 스케치                                | —        | 수정 불가 (이미지)     |
 
 **우선순위 규칙**
@@ -183,7 +183,7 @@ ticket-todo/
 3. 연관 **NFR 항목** 확인 → `docs/REQUIREMENTS.md §4`
 4. UI 구현 시 → `docs/tika-wireframe.png` + `docs/COMPONENT_SPEC.md` 참조
 5. API 구현 시 → `docs/API_SPEC.md` 1차 참조
-6. 테스트 구현 시 → `docs/TEST_SPEC.md` TC 번호 확인 후 구현
+6. 테스트 구현 시 → `docs/TEST_CASES.md` TC 번호 확인 후 구현
 
 ### 6-2. 충돌 발생 시 — 작업 중단 필수
 

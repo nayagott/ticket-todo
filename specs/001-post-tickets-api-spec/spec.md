@@ -105,7 +105,7 @@
 - **SC-001**: 유효한 POST 요청에 대해 응답 시간이 300ms 이내 (p95 기준) 로 HTTP 201과 TicketDto를 반환한다 (NFR).
 - **SC-002**: `title` 누락·길이 초과·`priority` 열거값 오류·날짜 형식 오류 등 4가지 유효성 실패 케이스가 모두 HTTP 400으로 거부된다.
 - **SC-003**: 생성된 티켓의 `status` 는 항상 `'Backlog'` 이며, `order` 는 해당 칼럼 내 최대값 + 1000 으로 계산된다.
-- **SC-004**: 관련 단위·통합 테스트(`docs/TEST_SPEC.md` 기준 TC) 가 모두 통과한다.
+- **SC-004**: 관련 단위·통합 테스트(`docs/TEST_CASES.md` 기준 TC) 가 모두 통과한다.
 - **SC-005**: TypeScript 타입 오류 0건, ESLint 오류 0건 상태에서 빌드가 성공한다 (Constitution I, Quality Gates).
 
 ---
