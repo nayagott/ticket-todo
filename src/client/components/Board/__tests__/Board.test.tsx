@@ -31,26 +31,26 @@ describe('Board — 기본 렌더링 (FR-006)', () => {
   it('Backlog 패널 + TODO/In Progress/Done 3칼럼 모두 렌더링', async () => {
     server.use(...ticketsHandlers([]));
     render(<Board />);
-    await waitFor(() => expect(screen.getByRole('list', { name: 'Backlog' })).toBeInTheDocument());
-    expect(screen.getByRole('list', { name: 'TODO' })).toBeInTheDocument();
-    expect(screen.getByRole('list', { name: 'In Progress' })).toBeInTheDocument();
-    expect(screen.getByRole('list', { name: 'Done' })).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByRole('list', { name: '백로그' })).toBeInTheDocument());
+    expect(screen.getByRole('list', { name: '할 일' })).toBeInTheDocument();
+    expect(screen.getByRole('list', { name: '진행 중' })).toBeInTheDocument();
+    expect(screen.getByRole('list', { name: '완료' })).toBeInTheDocument();
   });
 
   it('Backlog는 kanban-area 바깥에 위치', async () => {
     server.use(...ticketsHandlers([]));
     const { container } = render(<Board />);
-    await waitFor(() => expect(screen.getByRole('list', { name: 'Backlog' })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole('list', { name: '백로그' })).toBeInTheDocument());
     const kanbanArea = container.querySelector('.kanban-area');
     expect(kanbanArea).not.toBeNull();
-    expect(kanbanArea?.querySelector('[aria-label="Backlog"]')).toBeNull();
-    expect(screen.getByRole('list', { name: 'Backlog' }).closest('.kanban-area')).toBeNull();
+    expect(kanbanArea?.querySelector('[aria-label="백로그"]')).toBeNull();
+    expect(screen.getByRole('list', { name: '백로그' }).closest('.kanban-area')).toBeNull();
   });
 
   it('"새 업무" 클릭 → CreateModal 열림', async () => {
     server.use(...ticketsHandlers([]));
     render(<Board />);
-    await waitFor(() => expect(screen.getByRole('list', { name: 'Backlog' })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole('list', { name: '백로그' })).toBeInTheDocument());
     await userEvent.click(screen.getByRole('button', { name: /새 업무/ }));
     expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
@@ -58,7 +58,7 @@ describe('Board — 기본 렌더링 (FR-006)', () => {
   it('FilterBar 렌더링 확인 (FR-017, FR-018)', async () => {
     server.use(...ticketsHandlers([]));
     render(<Board />);
-    await waitFor(() => expect(screen.getByRole('list', { name: 'Backlog' })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole('list', { name: '백로그' })).toBeInTheDocument());
     expect(screen.getByRole('button', { name: '이번주 업무' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '일정이 초과된 업무' })).toBeInTheDocument();
   });
@@ -66,7 +66,7 @@ describe('Board — 기본 렌더링 (FR-006)', () => {
   it('aria-live="polite" 영역 존재 (NFR-010)', async () => {
     server.use(...ticketsHandlers([]));
     const { container } = render(<Board />);
-    await waitFor(() => expect(screen.getByRole('list', { name: 'Backlog' })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole('list', { name: '백로그' })).toBeInTheDocument());
     expect(container.querySelector('[aria-live="polite"]')).toBeInTheDocument();
   });
 });

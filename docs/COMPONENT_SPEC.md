@@ -2,7 +2,7 @@
 
 > 작성일: 2026-06-15
 > 버전: v1.0
-> 기반 문서: PRD.md v1.0 · TRD.md v1.2 · DATA_MODEL.md v1.0 · API_SPEC.md v1.1
+> 기반 문서: PRD.md v1.0 · TRD.md v1.2 · DATA_MODEL.md v1.0 · API_SPEC.md v1.1 · DESIGN_SYSTEM.md v1.0
 > 스키마 SSOT: DATA_MODEL.md
 
 ---

@@ -44,10 +44,10 @@ describe('시나리오 B — 초기 보드 렌더링', () => {
 
     await waitFor(() => expect(screen.getByText('Backlog 카드')).toBeInTheDocument());
 
-    const backlog     = screen.getByRole('list', { name: 'Backlog' });
-    const todo        = screen.getByRole('list', { name: 'TODO' });
-    const inProgress  = screen.getByRole('list', { name: 'In Progress' });
-    const done        = screen.getByRole('list', { name: 'Done' });
+    const backlog     = screen.getByRole('list', { name: '백로그' });
+    const todo        = screen.getByRole('list', { name: '할 일' });
+    const inProgress  = screen.getByRole('list', { name: '진행 중' });
+    const done        = screen.getByRole('list', { name: '완료' });
 
     expect(within(backlog).getByText('Backlog 카드')).toBeInTheDocument();
     expect(within(todo).getByText('TODO 카드')).toBeInTheDocument();

@@ -82,8 +82,8 @@ describe('시나리오 D — 이번주 업무 필터', () => {
     await userEvent.click(screen.getByRole('button', { name: '이번주 업무' }));
     expect(screen.getByText('이번주 드래그')).toBeInTheDocument();
 
-    const backlog = screen.getByRole('list', { name: 'Backlog' });
-    const todo    = screen.getByRole('list', { name: 'TODO' });
+    const backlog = screen.getByRole('list', { name: '백로그' });
+    const todo    = screen.getByRole('list', { name: '할 일' });
 
     mockBoundingClientRect(backlog, { left: 0, top: 0, width: 150, height: 600 });
     mockBoundingClientRect(todo,    { left: 200, top: 0, width: 150, height: 600 });

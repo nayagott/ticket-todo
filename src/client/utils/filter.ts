@@ -20,7 +20,7 @@ export function isOverdue(t: TicketDto): boolean {
 }
 
 export function isThisWeek(t: TicketDto): boolean {
-  if (!t.dueDate) return false;
+  if (!t.dueDate || t.status === 'Done') return false;
   const due = new Date(t.dueDate);
   return due >= startOfWeek() && due <= endOfWeek();
 }

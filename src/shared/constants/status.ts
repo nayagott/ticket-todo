@@ -7,18 +7,25 @@ export type ColumnStatus = (typeof COLUMN_STATUSES)[number];
 export type Priority = (typeof PRIORITIES)[number];
 // 'Low' | 'Medium' | 'High'
 
+export const COLUMN_LABELS: Record<ColumnStatus, string> = {
+  Backlog:       '백로그',
+  TODO:          '할 일',
+  'In Progress': '진행 중',
+  Done:          '완료',
+};
+
 export const DUE_WARNING_DAYS = 3; // D-3 임박 기준 (FR-012)
 
 export function getDeadlineStyle(dueDate: string | null, status: ColumnStatus): string {
-  if (!dueDate || status === 'Done') return 'border-gray-200'; // FR-014
+  if (!dueDate || status === 'Done') return 'border-[#DFE1E6]'; // FR-014
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const due = new Date(dueDate); // ISO 8601 문자열 → Date
   due.setHours(0, 0, 0, 0);
   const diffDays = Math.ceil((due.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 
-  if (diffDays < 0)                 return 'border-red-500';    // 기한 초과 (FR-013)
-  if (diffDays <= DUE_WARNING_DAYS) return 'border-orange-400'; // D-3 이내 (FR-012)
-  return 'border-gray-200';                                      // 기본 (FR-014)
+  if (diffDays < 0)                 return 'border-[#FF5630]';  // 기한 초과 (FR-013) DS §1.2 Highlight Red
+  if (diffDays <= DUE_WARNING_DAYS) return 'border-[#FFAB00]';  // D-3 이내 (FR-012) DS §1.2 Highlight Orange
+  return 'border-[#DFE1E6]';                                     // 기본 (FR-014)
 }
 // diffDays === 0 (당일)은 초과가 아니므로 orange 처리 — WCAG AA 4.5:1 준수 (NFR-012)

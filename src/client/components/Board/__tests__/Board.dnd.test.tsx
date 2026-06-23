@@ -32,10 +32,10 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 function mockAllColumnRects() {
-  mockBoundingClientRect(screen.getByRole('list', { name: 'Backlog' }), RECTS.Backlog);
-  mockBoundingClientRect(screen.getByRole('list', { name: 'TODO' }), RECTS.TODO);
-  mockBoundingClientRect(screen.getByRole('list', { name: 'In Progress' }), RECTS['In Progress']);
-  mockBoundingClientRect(screen.getByRole('list', { name: 'Done' }), RECTS.Done);
+  mockBoundingClientRect(screen.getByRole('list', { name: '백로그' }), RECTS.Backlog);
+  mockBoundingClientRect(screen.getByRole('list', { name: '할 일' }), RECTS.TODO);
+  mockBoundingClientRect(screen.getByRole('list', { name: '진행 중' }), RECTS['In Progress']);
+  mockBoundingClientRect(screen.getByRole('list', { name: '완료' }), RECTS.Done);
 }
 
 describe('Board DnD (FR-009)', () => {
@@ -48,8 +48,8 @@ describe('Board DnD (FR-009)', () => {
     mockAllColumnRects();
 
     const card = screen.getByText('신규 티켓').closest('[role="listitem"]') as HTMLElement;
-    const backlogPanel = screen.getByRole('list', { name: 'Backlog' });
-    const todoColumn = screen.getByRole('list', { name: 'TODO' });
+    const backlogPanel = screen.getByRole('list', { name: '백로그' });
+    const todoColumn = screen.getByRole('list', { name: '할 일' });
 
     dragAndDrop(card, { left: 10, top: 10, width: 80, height: 40 }, todoColumn, RECTS.TODO);
 
@@ -68,7 +68,7 @@ describe('Board DnD (FR-009)', () => {
     mockAllColumnRects();
 
     const card = screen.getByText('신규 카드').closest('[role="listitem"]') as HTMLElement;
-    const todoColumn = screen.getByRole('list', { name: 'TODO' });
+    const todoColumn = screen.getByRole('list', { name: '할 일' });
 
     dragAndDrop(card, { left: 10, top: 10, width: 80, height: 40 }, todoColumn, RECTS.TODO);
 
@@ -77,7 +77,7 @@ describe('Board DnD (FR-009)', () => {
     });
   });
 
-  it('TC-INT-008: 기한 초과 카드를 Done으로 드래그 → border-gray-200으로 변경', async () => {
+  it('TC-INT-008: 기한 초과 카드를 Done으로 드래그 → border-[#DFE1E6]으로 변경', async () => {
     const ticket = makeTicket({
       id: '1',
       title: '초과 티켓',
@@ -90,17 +90,17 @@ describe('Board DnD (FR-009)', () => {
     await waitFor(() => screen.getByText('초과 티켓'));
 
     const cardBefore = screen.getByText('초과 티켓').closest('[role="listitem"]') as HTMLElement;
-    expect(cardBefore).toHaveClass('border-red-500');
+    expect(cardBefore).toHaveClass('border-[#FF5630]');
 
     mockAllColumnRects();
-    const inProgressColumn = screen.getByRole('list', { name: 'In Progress' });
-    const doneColumn = screen.getByRole('list', { name: 'Done' });
+    const inProgressColumn = screen.getByRole('list', { name: '진행 중' });
+    const doneColumn = screen.getByRole('list', { name: '완료' });
 
     dragAndDrop(cardBefore, { left: 410, top: 10, width: 80, height: 40 }, doneColumn, RECTS.Done);
 
     await waitFor(() => {
       const cardAfter = within(doneColumn).getByText('초과 티켓').closest('[role="listitem"]');
-      expect(cardAfter).toHaveClass('border-gray-200');
+      expect(cardAfter).toHaveClass('border-[#DFE1E6]');
     });
     expect(within(inProgressColumn).queryByText('초과 티켓')).toBeNull();
   });
@@ -116,13 +116,13 @@ describe('Board DnD — aria-live 알림 (NFR-010)', () => {
     mockAllColumnRects();
 
     const card = screen.getByText('알림 티켓').closest('[role="listitem"]') as HTMLElement;
-    const todoColumn = screen.getByRole('list', { name: 'TODO' });
+    const todoColumn = screen.getByRole('list', { name: '할 일' });
 
     dragAndDrop(card, { left: 10, top: 10, width: 80, height: 40 }, todoColumn, RECTS.TODO);
 
     await waitFor(() => {
       const liveRegion = container.querySelector('[aria-live="polite"]');
-      expect(liveRegion?.textContent).toContain('TODO');
+      expect(liveRegion?.textContent).toContain('할 일');
     });
   });
 });
@@ -137,7 +137,7 @@ describe('Board DnD — 칼럼 내 순서 변경 (FR-010)', () => {
     await waitFor(() => screen.getByText('카드A'));
     mockAllColumnRects();
 
-    const todoColumn = screen.getByRole('list', { name: 'TODO' });
+    const todoColumn = screen.getByRole('list', { name: '할 일' });
     const cardA = screen.getByText('카드A').closest('[role="listitem"]') as HTMLElement;
     const cardB = screen.getByText('카드B').closest('[role="listitem"]') as HTMLElement;
 

@@ -23,12 +23,12 @@ function makeTicket(id: string, status: TicketDto['status'] = 'TODO'): TicketDto
 describe('Column', () => {
   it('TC-COMP-015: status prop 기반 헤더 텍스트 렌더링', () => {
     render(<Column status="In Progress" tickets={[]} onCardClick={noop} />);
-    expect(screen.getByRole('heading', { name: 'In Progress' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '진행 중' })).toBeInTheDocument();
   });
 
   it('role="list" + aria-label=status 적용 (NFR-011)', () => {
     render(<Column status="TODO" tickets={[]} onCardClick={noop} />);
-    expect(screen.getByRole('list', { name: 'TODO' })).toBeInTheDocument();
+    expect(screen.getByRole('list', { name: '할 일' })).toBeInTheDocument();
   });
 
   it('TC-COMP-016: tickets 배열 기반 카드 렌더링', () => {
@@ -39,7 +39,7 @@ describe('Column', () => {
 
   it('TC-COMP-018: 빈 칼럼이어도 컨테이너 DOM 유지', () => {
     render(<Column status="Done" tickets={[]} onCardClick={noop} />);
-    expect(screen.getByRole('list', { name: 'Done' })).toBeInTheDocument();
+    expect(screen.getByRole('list', { name: '완료' })).toBeInTheDocument();
     expect(screen.queryAllByRole('listitem')).toHaveLength(0);
   });
 

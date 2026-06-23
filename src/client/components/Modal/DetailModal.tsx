@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { updateTicketSchema } from '@/shared/schemas/ticketSchema';
-import { COLUMN_STATUSES, PRIORITIES } from '@/shared/constants/status';
+import { COLUMN_LABELS, COLUMN_STATUSES, PRIORITIES } from '@/shared/constants/status';
 import { ConfirmDialog } from './ConfirmDialog';
 import type { TicketDto } from '@/shared/types/ticket';
 import type { UpdateTicketInput } from '@/shared/schemas/ticketSchema';
@@ -205,11 +205,11 @@ export function DetailModal({ ticket, onClose, updateTicket, deleteTicket }: Det
                 onBlur={() => saveField('status')}
                 className={inputClass}
               >
-                {COLUMN_STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
+                {COLUMN_STATUSES.map(s => <option key={s} value={s}>{COLUMN_LABELS[s]}</option>)}
               </select>
             ) : (
               <span className={viewClass} onClick={() => setEditField('status')}>
-                {ticket.status}
+                {COLUMN_LABELS[ticket.status]}
               </span>
             )}
           </FieldRow>

@@ -23,12 +23,12 @@ function makeTicket(id: string): TicketDto {
 describe('BacklogPanel', () => {
   it('패널 헤더 "Backlog" 표시 (FR-006)', () => {
     render(<BacklogPanel tickets={[]} onCardClick={noop} />);
-    expect(screen.getByRole('heading', { name: 'Backlog' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '백로그' })).toBeInTheDocument();
   });
 
-  it('role="list" + aria-label="Backlog" 적용 (NFR-011)', () => {
+  it('role="list" + aria-label="백로그" 적용 (NFR-011)', () => {
     render(<BacklogPanel tickets={[]} onCardClick={noop} />);
-    expect(screen.getByRole('list', { name: 'Backlog' })).toBeInTheDocument();
+    expect(screen.getByRole('list', { name: '백로그' })).toBeInTheDocument();
   });
 
   it('TC-COMP-012: tickets 배열 기반 카드 렌더링', () => {
@@ -39,7 +39,7 @@ describe('BacklogPanel', () => {
 
   it('TC-COMP-014: 빈 배열 — 드롭 영역 컨테이너 유지', () => {
     render(<BacklogPanel tickets={[]} onCardClick={noop} />);
-    expect(screen.getByRole('list', { name: 'Backlog' })).toBeInTheDocument();
+    expect(screen.getByRole('list', { name: '백로그' })).toBeInTheDocument();
     expect(screen.queryAllByRole('listitem')).toHaveLength(0);
   });
 

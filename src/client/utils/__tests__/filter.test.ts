@@ -65,6 +65,17 @@ describe('applyFilter', () => {
     expect(result).toHaveLength(0);
   });
 
+  it('TC-UTIL-012: Done 티켓은 thisWeek 필터에서 제외 (FR-018)', () => {
+    const tickets = [
+      ticket({ id: 'active', dueDate: d(1),  status: 'TODO' }),
+      ticket({ id: 'done',   dueDate: d(1),  status: 'Done' }),
+    ];
+    const result = applyFilter(tickets, { overdue: false, thisWeek: true });
+    const ids = result.map(t => t.id);
+    expect(ids).toContain('active');
+    expect(ids).not.toContain('done');
+  });
+
   it('둘 다 활성 → OR 조건 (하나라도 해당하면 포함)', () => {
     const tickets = [
       ticket({ id: 'over', dueDate: d(-1), status: 'TODO' }),
@@ -104,6 +115,10 @@ describe('isOverdue', () => {
 describe('isThisWeek', () => {
   it('dueDate 없음 → false', () => {
     expect(isThisWeek(ticket({ dueDate: null }))).toBe(false);
+  });
+
+  it('status === "Done" → false (FR-018 Done 제외)', () => {
+    expect(isThisWeek(ticket({ dueDate: d(1), status: 'Done' }))).toBe(false);
   });
 
   it('이번 주 안 날짜 → true', () => {

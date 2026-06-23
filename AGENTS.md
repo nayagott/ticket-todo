@@ -107,6 +107,7 @@ ticket-todo/
 | `docs/DATA_MODEL.md`      | DB 스키마 SSOT — 컬럼 타입·인덱스·DTO·시드 데이터 | **최우선 (DB 스키마)** | 사용자 지시 시에만 |
 | `docs/API_SPEC.md`        | 엔드포인트 상세 명세 (요청·응답·에러·order 규칙)  | 1차 참조 | 사용자 지시 시에만     |
 | `docs/COMPONENT_SPEC.md`  | 컴포넌트 책임·Props·State·이벤트·접근성 명세      | —        | 사용자 지시 시에만     |
+| `docs/DESIGN_SYSTEM.md`   | 색상·타이포그래피·UI 컴포넌트·레이아웃 디자인 가이드 | UI 구현 참조 | 사용자 지시 시에만  |
 | `docs/TEST_CASES.md`      | TC 명세 및 FR/NFR 추적 매트릭스                   | —        | 사용자 지시 시에만     |
 | `docs/tika-wireframe.png` | UI 레이아웃 스케치                                | —        | 수정 불가 (이미지)     |
 
@@ -181,7 +182,7 @@ ticket-todo/
 1. 구현 대상 **FR 번호** 확인 → `docs/REQUIREMENTS.md §3`
 2. 연관 **PRD 섹션** 확인 → `docs/PRD.md §4` 화면별 동작 정의
 3. 연관 **NFR 항목** 확인 → `docs/REQUIREMENTS.md §4`
-4. UI 구현 시 → `docs/tika-wireframe.png` + `docs/COMPONENT_SPEC.md` 참조
+4. UI 구현 시 → `docs/tika-wireframe.png` + `docs/COMPONENT_SPEC.md` + `docs/DESIGN_SYSTEM.md` 참조
 5. API 구현 시 → `docs/API_SPEC.md` 1차 참조
 6. 테스트 구현 시 → `docs/TEST_CASES.md` TC 번호 확인 후 구현
 

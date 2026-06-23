@@ -61,7 +61,7 @@ describe('DetailModal — 필드 표시 (FR-016)', () => {
 
   it('status 표시', () => {
     render(<DetailModal ticket={baseTicket} onClose={jest.fn()} updateTicket={mockUpdate()} deleteTicket={mockDelete()} />);
-    expect(screen.getByText('TODO')).toBeInTheDocument();
+    expect(screen.getByText('할 일')).toBeInTheDocument();
   });
 
   it('createdAt 표시 (읽기 전용)', () => {

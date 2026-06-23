@@ -78,39 +78,39 @@ describe('TicketCard — priority/dueDate 배지', () => {
 });
 
 describe('TicketCard — deadline 테두리', () => {
-  it('TC-COMP-023: 기한 초과 + Done 아님 → border-red-500', () => {
+  it('TC-COMP-023: 기한 초과 + Done 아님 → border-[#FF5630] (DS §1.2 Highlight Red)', () => {
     const ticket: TicketDto = { ...baseTicket, status: 'TODO', dueDate: '2026-06-10T00:00:00.000Z' };
     render(<TicketCard ticket={ticket} onClick={noop} />);
-    expect(screen.getByRole('listitem')).toHaveClass('border-red-500');
+    expect(screen.getByRole('listitem')).toHaveClass('border-[#FF5630]');
   });
 
-  it('TC-COMP-027: status=Done이면 기한 초과여도 border-gray-200', () => {
+  it('TC-COMP-027: status=Done이면 기한 초과여도 border-[#DFE1E6]', () => {
     const ticket: TicketDto = { ...baseTicket, status: 'Done', dueDate: '2026-06-10T00:00:00.000Z' };
     render(<TicketCard ticket={ticket} onClick={noop} />);
-    expect(screen.getByRole('listitem')).toHaveClass('border-gray-200');
+    expect(screen.getByRole('listitem')).toHaveClass('border-[#DFE1E6]');
   });
 
-  it('dueDate 없으면 border-gray-200', () => {
+  it('dueDate 없으면 border-[#DFE1E6]', () => {
     render(<TicketCard ticket={baseTicket} onClick={noop} />);
-    expect(screen.getByRole('listitem')).toHaveClass('border-gray-200');
+    expect(screen.getByRole('listitem')).toHaveClass('border-[#DFE1E6]');
   });
 
-  it('TC-COMP-024: D-3 이내(+1일) → border-orange-400', () => {
+  it('TC-COMP-024: D-3 이내(+1일) → border-[#FFAB00] (DS §1.2 Highlight Orange)', () => {
     const ticket: TicketDto = { ...baseTicket, status: 'TODO', dueDate: daysFromNow(1) };
     render(<TicketCard ticket={ticket} onClick={noop} />);
-    expect(screen.getByRole('listitem')).toHaveClass('border-orange-400');
+    expect(screen.getByRole('listitem')).toHaveClass('border-[#FFAB00]');
   });
 
-  it('TC-COMP-025: D-3 당일(diffDays=3) → border-orange-400 (경계값)', () => {
+  it('TC-COMP-025: D-3 당일(diffDays=3) → border-[#FFAB00] (경계값)', () => {
     const ticket: TicketDto = { ...baseTicket, status: 'TODO', dueDate: daysFromNow(3) };
     render(<TicketCard ticket={ticket} onClick={noop} />);
-    expect(screen.getByRole('listitem')).toHaveClass('border-orange-400');
+    expect(screen.getByRole('listitem')).toHaveClass('border-[#FFAB00]');
   });
 
-  it('TC-COMP-026: D-4 → border-gray-200 (경계값)', () => {
+  it('TC-COMP-026: D-4 → border-[#DFE1E6] (경계값)', () => {
     const ticket: TicketDto = { ...baseTicket, status: 'TODO', dueDate: daysFromNow(4) };
     render(<TicketCard ticket={ticket} onClick={noop} />);
-    expect(screen.getByRole('listitem')).toHaveClass('border-gray-200');
+    expect(screen.getByRole('listitem')).toHaveClass('border-[#DFE1E6]');
   });
 });
 

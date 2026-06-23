@@ -19,7 +19,7 @@ describe('시나리오 A — 새 티켓 생성', () => {
   it('TC-INT-001: "새 업무" 클릭 → CreateModal 오픈', async () => {
     server.use(...ticketsHandlers([]));
     render(<Board />);
-    await waitFor(() => expect(screen.getByRole('list', { name: 'Backlog' })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole('list', { name: '백로그' })).toBeInTheDocument());
 
     await userEvent.click(screen.getByRole('button', { name: /새 업무/ }));
 
@@ -37,7 +37,7 @@ describe('시나리오 A — 새 티켓 생성', () => {
     );
 
     render(<Board />);
-    await waitFor(() => expect(screen.getByRole('list', { name: 'Backlog' })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole('list', { name: '백로그' })).toBeInTheDocument());
     await userEvent.click(screen.getByRole('button', { name: /새 업무/ }));
 
     const saveBtn = screen.getByRole('button', { name: '저장' });
@@ -51,14 +51,14 @@ describe('시나리오 A — 새 티켓 생성', () => {
     server.use(...ticketsHandlers([]));
 
     render(<Board />);
-    await waitFor(() => expect(screen.getByRole('list', { name: 'Backlog' })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole('list', { name: '백로그' })).toBeInTheDocument());
     await userEvent.click(screen.getByRole('button', { name: /새 업무/ }));
 
     await userEvent.type(screen.getByLabelText(/제목/), '새 통합 티켓');
     await userEvent.click(screen.getByRole('button', { name: '저장' }));
 
     await waitFor(() => {
-      const backlog = screen.getByRole('list', { name: 'Backlog' });
+      const backlog = screen.getByRole('list', { name: '백로그' });
       expect(within(backlog).getByText('새 통합 티켓')).toBeInTheDocument();
     });
   });

@@ -57,9 +57,9 @@ describe('시나리오 C — 기한 경고 색상', () => {
     const warnCard = screen.getByText('임박 카드c010').closest('[role="listitem"]');
     const okCard   = screen.getByText('정상 카드c010').closest('[role="listitem"]');
 
-    expect(overCard).toHaveClass('border-red-500');
-    expect(warnCard).toHaveClass('border-orange-400');
-    expect(okCard).toHaveClass('border-gray-200');
+    expect(overCard).toHaveClass('border-[#FF5630]');
+    expect(warnCard).toHaveClass('border-[#FFAB00]');
+    expect(okCard).toHaveClass('border-[#DFE1E6]');
   });
 
   it('TC-INT-011: "일정이 초과된 업무" 필터 → 해당 카드만 표시', async () => {
@@ -82,7 +82,7 @@ describe('시나리오 C — 기한 경고 색상', () => {
     expect(screen.queryByText('정상c011-2')).not.toBeInTheDocument();
   });
 
-  it('TC-INT-012: DetailModal에서 dueDate 수정 → 테두리 border-gray-200으로 변경', async () => {
+  it('TC-INT-012: DetailModal에서 dueDate 수정 → 테두리 border-[#DFE1E6]으로 변경', async () => {
     const id = 'c012-edit';
     const futureISO = daysFromNow(10);
     const overdueTicket = ticket({ id, title: '기한초과c012', dueDate: daysFromNow(-1), status: 'TODO' });
@@ -96,9 +96,9 @@ describe('시나리오 C — 기한 경고 색상', () => {
     render(<Board />);
     await waitFor(() => expect(screen.getByText('기한초과c012')).toBeInTheDocument());
 
-    // 카드 초기 상태: border-red-500
-    const todoCol = screen.getByRole('list', { name: 'TODO' });
-    expect(within(todoCol).getAllByRole('listitem')[0]).toHaveClass('border-red-500');
+    // 카드 초기 상태: border-[#FF5630]
+    const todoCol = screen.getByRole('list', { name: '할 일' });
+    expect(within(todoCol).getAllByRole('listitem')[0]).toHaveClass('border-[#FF5630]');
 
     // 카드 클릭 → DetailModal 오픈 (only one element at this point)
     fireEvent.click(screen.getByText('기한초과c012'));
@@ -115,9 +115,9 @@ describe('시나리오 C — 기한 경고 색상', () => {
     await userEvent.tab(); // blur → saveField('dueDate')
 
     await waitFor(() => {
-      // replaceTicket updates the board card's dueDate → border-gray-200
+      // replaceTicket updates the board card's dueDate → border-[#DFE1E6]
       const cards = within(todoCol).getAllByRole('listitem');
-      expect(cards[0]).toHaveClass('border-gray-200');
+      expect(cards[0]).toHaveClass('border-[#DFE1E6]');
     });
   });
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { DndContext } from '@dnd-kit/core';
 import { BacklogPanel } from '@/client/components/Column/BacklogPanel';
 import { Column } from '@/client/components/Column/Column';
@@ -12,6 +12,7 @@ import { useDnd } from '@/client/hooks/useDnd';
 import { useTickets } from '@/client/hooks/useTickets';
 import { groupByStatus } from '@/client/utils/groupByStatus';
 import { applyFilter, type FilterState } from '@/client/utils/filter';
+import { COLUMN_LABELS } from '@/shared/constants/status';
 import type { ColumnStatus } from '@/shared/constants/status';
 
 const KANBAN_STATUSES = ['TODO', 'In Progress', 'Done'] as const;
@@ -54,7 +55,7 @@ export function Board() {
     (id, status, order) =>
       moveTicket(id, status, order).then(() => {
         const t = tickets.find(tk => tk.id === id);
-        if (t) setAnnouncement(`"${t.title}"이(가) ${status}로 이동됐습니다.`);
+        if (t) setAnnouncement(`"${t.title}"이(가) ${COLUMN_LABELS[status]}(으)로 이동됐습니다.`);
       }).catch(() => {
         setAnnouncement('이동에 실패했습니다. 이전 상태로 복원됐습니다.');
       }),
@@ -68,23 +69,34 @@ export function Board() {
     <div className="flex h-screen flex-col bg-[var(--color-board-bg)]">
       <Header onNewTicket={() => setCreateModalOpen(true)} />
 
-      <FilterBar filter={filter} onFilterChange={handleFilterChange} />
-
       <DndContext sensors={sensors} onDragEnd={onDragEnd}>
         <div className="board-layout">
           <BacklogPanel
             tickets={ticketsByColumn.Backlog}
             onCardClick={setSelectedTicketId}
           />
-          <div className="kanban-area">
-            {KANBAN_STATUSES.map(status => (
-              <Column
-                key={status}
-                status={status}
-                tickets={ticketsByColumn[status]}
-                onCardClick={setSelectedTicketId}
-              />
-            ))}
+          {/* DS §3.3 스위밍 레인 구분선: Backlog | kanban-right */}
+          <div aria-hidden="true" className="swimlane-divider" />
+          <div className="kanban-right">
+            {/* FilterBar: TODO·In Progress·Done 위에만 표시 */}
+            <FilterBar
+              filter={filter}
+              onFilterChange={handleFilterChange}
+              onClearFilter={() => setFilter({ overdue: false, thisWeek: false })}
+            />
+            <div className="kanban-area">
+              {KANBAN_STATUSES.map((status, i) => (
+                <Fragment key={status}>
+                  {/* DS §3.3 스위밍 레인 구분선: TODO | In Progress | Done */}
+                  {i > 0 && <div aria-hidden="true" className="swimlane-divider" />}
+                  <Column
+                    status={status}
+                    tickets={ticketsByColumn[status]}
+                    onCardClick={setSelectedTicketId}
+                  />
+                </Fragment>
+              ))}
+            </div>
           </div>
         </div>
       </DndContext>
